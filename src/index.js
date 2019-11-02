@@ -1,10 +1,13 @@
 import { GraphQLServer } from "graphql-yoga";
+import { users, posts } from "./dummy-data";
 
 // Type definitions (schema)
 const typeDefs = `
     type Query {
+        users(query: String): [User!]!
+        posts(query: String): [Post!]!
         me: User!
-        post: Post!
+        post(id: String!): Post
     }
 
     type User {
@@ -25,21 +28,29 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
   Query: {
-    me() {
-      return {
-        id: "abc123",
-        name: "Some User",
-        email: "mail@mail.com",
-        age: 26
-      };
+    users(parent, { query }, ctx, info) {
+      if (query) {
+        return users.filter(user =>
+          user.name.toLowerCase().includes(query.toLowerCase())
+        );
+      }
+      return users;
     },
-    post() {
-      return {
-        id: "abc123",
-        title: "Some Post Title",
-        body: "This is the post's body",
-        published: true
-      };
+    posts(parent, { query }, ctx, info) {
+      if (query) {
+        return posts.filter(
+          post =>
+            post.title.toLowerCase().includes(query.toLowerCase()) ||
+            post.body.toLowerCase().includes(query.toLowerCase())
+        );
+      }
+      return posts;
+    },
+    me() {
+      return users[0];
+    },
+    post(parent, { id }, ctx, info) {
+      return posts.find(post => post.id === id);
     }
   }
 };
