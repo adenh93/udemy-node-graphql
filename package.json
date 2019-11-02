@@ -4,6 +4,7 @@
   "description": "A repository to follow along with the following udemy course https://www.udemy.com/course/graphql-bootcamp/",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/adenh93/udemy-node-graphql/issues"
   },
-  "homepage": "https://github.com/adenh93/udemy-node-graphql#readme"
+  "homepage": "https://github.com/adenh93/udemy-node-graphql#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
 }
