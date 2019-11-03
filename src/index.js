@@ -1,6 +1,76 @@
 import { GraphQLServer } from "graphql-yoga";
 import uuidv4 from "uuid/v4";
-import { users, posts, comments } from "./dummy-data";
+
+let users = [
+  {
+    id: "1",
+    name: "Aden Herold",
+    email: "aden.herold1@gmail.com",
+    age: 26
+  },
+  {
+    id: "2",
+    name: "John Smith",
+    email: "john.smith@graphql.com"
+  },
+  {
+    id: "3",
+    name: "Joe Bloggs",
+    email: "joe.bloggs@graphql.com",
+    age: 24
+  }
+];
+
+let posts = [
+  {
+    id: "1",
+    title: "Why learn GraphQL?",
+    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    published: true,
+    author: "1"
+  },
+  {
+    id: "2",
+    title: "Upcoming React features",
+    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    published: false,
+    author: "1"
+  },
+  {
+    id: "3",
+    title: "Express vs Koa",
+    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    published: true,
+    author: "2"
+  }
+];
+
+let comments = [
+  {
+    id: "1",
+    text: "This is the next thing I need to learn.",
+    author: "3",
+    post: "1"
+  },
+  {
+    id: "2",
+    text: "Interesting seeing how GraphQL stacks up to REST.",
+    author: "2",
+    post: "1"
+  },
+  {
+    id: "3",
+    text: "Sounds great! Looking forward to the future of React!",
+    author: "1",
+    post: "2"
+  },
+  {
+    id: "4",
+    text: "Interesting. I might have to give Koa a spin some time.",
+    author: "1",
+    post: "3"
+  }
+];
 
 // Type definitions (schema)
 const typeDefs = `
@@ -14,6 +84,7 @@ const typeDefs = `
 
   type Mutation {
     createUser(data: CreateUserInput): User!
+    deleteUser(id: ID!): User!
     createPost(data: CreatePostInput): Post!
     createComment(data: CreateCommentInput): Comment!
   }
@@ -109,6 +180,24 @@ const resolvers = {
 
       const user = { id: uuidv4(), ...data };
       users.push(user);
+
+      return user;
+    },
+    deleteUser(parent, { id }, ctx, info) {
+      const user = users.find(user => user.id === id);
+
+      if (!user) {
+        throw new Error("User not found!");
+      }
+
+      posts = posts.filter(post => {
+        comments = comments.filter(comment => comment.post !== post.id);
+        return post.author !== id;
+      });
+
+      comments = comments.filter(comment => comment.author !== id);
+      users = users.filter(user => user.id !== id);
+
       return user;
     },
     createPost(parent, { data }, ctx, info) {
@@ -120,6 +209,7 @@ const resolvers = {
 
       const post = { id: uuidv4(), ...data };
       posts.push(post);
+
       return post;
     },
     createComment(parent, { data }, ctx, info) {
@@ -139,6 +229,7 @@ const resolvers = {
 
       const comment = { id: uuidv4(), ...data };
       comments.push(comment);
+
       return comment;
     }
   },
