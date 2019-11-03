@@ -24,18 +24,21 @@ export const posts = [
     id: "1",
     title: "Why learn GraphQL?",
     body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    published: true
+    published: true,
+    author: "1"
   },
   {
     id: "2",
     title: "Upcoming React features",
     body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    published: false
+    published: false,
+    author: "1"
   },
   {
     id: "3",
     title: "Express vs Koa",
     body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    published: true
+    published: true,
+    author: "2"
   }
 ];
