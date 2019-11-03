@@ -1,11 +1,12 @@
 import { GraphQLServer } from "graphql-yoga";
-import { users, posts } from "./dummy-data";
+import { users, posts, comments } from "./dummy-data";
 
 // Type definitions (schema)
 const typeDefs = `
     type Query {
         users(query: String): [User!]!
         posts(query: String): [Post!]!
+        comments(query: String): [Comment!]!
         me: User!
         post(id: String!): Post
     }
@@ -24,6 +25,11 @@ const typeDefs = `
         body: String!
         published: Boolean!
         author: User!
+    }
+
+    type Comment {
+      id: ID!
+      text: String!
     }
 `;
 
@@ -47,6 +53,14 @@ const resolvers = {
         );
       }
       return posts;
+    },
+    comments(parent, { query }, ctx, info) {
+      if (query) {
+        return comments.filter(comment =>
+          comment.text.toLowerCase().includes(query.toLowerCase())
+        );
+      }
+      return comments;
     },
     me() {
       return users[0];
