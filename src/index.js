@@ -3,36 +3,38 @@ import { users, posts, comments } from "./dummy-data";
 
 // Type definitions (schema)
 const typeDefs = `
-    type Query {
-        users(query: String): [User!]!
-        posts(query: String): [Post!]!
-        comments(query: String): [Comment!]!
-        me: User!
-        post(id: String!): Post
-    }
+  type Query {
+    users(query: String): [User!]!
+    posts(query: String): [Post!]!
+    comments(query: String): [Comment!]!
+    me: User!
+    post(id: String!): Post
+  }
 
-    type User {
-        id: ID!
-        name: String!
-        email: String!
-        age: Int
-        posts: [Post!]!
-        comments: [Comment!]!
-    }
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    age: Int
+    posts: [Post!]!
+    comments: [Comment!]!
+  }
 
-    type Post {
-        id: ID!
-        title: String!
-        body: String!
-        published: Boolean!
-        author: User!
-    }
+  type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
+    author: User!
+    comments: [Comment!]!
+  }
 
-    type Comment {
-      id: ID!
-      text: String!
-      author: User!
-    }
+  type Comment {
+    id: ID!
+    text: String!
+    author: User!
+    post: Post!
+  }
 `;
 
 // Resolvers
@@ -82,11 +84,17 @@ const resolvers = {
   Post: {
     author({ author }, args, ctx, info) {
       return users.find(user => user.id === author);
+    },
+    comments({ id }, args, ctx, info) {
+      return comments.filter(comment => comment.post === id);
     }
   },
   Comment: {
     author({ author }, args, ctx, info) {
       return users.find(user => user.id === author);
+    },
+    post({ post: postId }, args, ctx, info) {
+      return posts.find(post => post.id === postId);
     }
   }
 };
