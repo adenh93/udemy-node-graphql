@@ -14,6 +14,8 @@ const typeDefs = `
 
   type Mutation {
     createUser(name: String!, email: String!, age: Int): User!
+    createPost(title: String!, body: String!, published: Boolean!, author: String!): Post!
+    createComment(text: String!, author: String!, post: String!): Comment!
   }
 
   type User {
@@ -80,7 +82,7 @@ const resolvers = {
   },
   Mutation: {
     createUser(parent, args, ctx, info) {
-      const emailTaken = users.find(user => user.email === args.email);
+      const emailTaken = users.some(user => user.email === args.email);
 
       if (emailTaken) {
         throw new Error("Email is already taken!");
@@ -89,6 +91,36 @@ const resolvers = {
       const user = { id: uuidv4(), ...args };
       users.push(user);
       return user;
+    },
+    createPost(parent, args, ctx, info) {
+      const userExists = users.some(user => user.id === args.author);
+
+      if (!userExists) {
+        throw new Error("Author not found!");
+      }
+
+      const post = { id: uuidv4(), ...args };
+      posts.push(post);
+      return post;
+    },
+    createComment(parent, args, ctx, info) {
+      const userExists = users.some(user => user.id === args.author);
+
+      if (!userExists) {
+        throw new Error("Author not found!");
+      }
+
+      const postExists = posts.find(
+        post => post.id === args.post && post.published
+      );
+
+      if (!postExists) {
+        throw new Error("Post not found!");
+      }
+
+      const comment = { id: uuidv4(), ...args };
+      comments.push(comment);
+      return comment;
     }
   },
   User: {
