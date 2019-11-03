@@ -46,18 +46,22 @@ export const posts = [
 export const comments = [
   {
     id: "1",
-    text: "This is the next thing I need to learn."
+    text: "This is the next thing I need to learn.",
+    author: "3"
   },
   {
     id: "2",
-    text: "Interesting seeing how GraphQL stacks up to REST."
+    text: "Interesting seeing how GraphQL stacks up to REST.",
+    author: "2"
   },
   {
     id: "3",
-    text: "Sounds great! Looking forward to the future of React!"
+    text: "Sounds great! Looking forward to the future of React!",
+    author: "1"
   },
   {
     id: "4",
-    text: "Interesting. I might have to give Koa a spin some time."
+    text: "Interesting. I might have to give Koa a spin some time.",
+    author: "1"
   }
 ];
