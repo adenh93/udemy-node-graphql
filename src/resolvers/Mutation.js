@@ -92,7 +92,7 @@ export const Mutation = {
     return post;
   },
   updatePost(parent, { id, data }, { db, pubsub }, info) {
-    const post = db.posts.find(post => post.id === id);
+    let post = db.posts.find(post => post.id === id);
     const originalPost = { ...post };
 
     if (!post) {
@@ -146,11 +146,16 @@ export const Mutation = {
 
     const comment = { id: uuidv4(), ...data };
     db.comments.push(comment);
-    pubsub.publish(`comment ${data.post}`, { comment });
+    pubsub.publish(`comment ${data.post}`, {
+      comment: {
+        mutation: "CREATED",
+        data: comment
+      }
+    });
 
     return comment;
   },
-  deleteComment(parent, { id }, { db }, info) {
+  deleteComment(parent, { id }, { db, pubsub }, info) {
     const comment = db.comments.find(comment => comment.id === id);
 
     if (!comment) {
@@ -158,16 +163,31 @@ export const Mutation = {
     }
 
     db.comments = db.comments.filter(comment => comment.id !== id);
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: "DELETED",
+        data: comment
+      }
+    });
 
     return comment;
   },
-  updateComment(parent, { id, data }, { db }, info) {
-    const comment = db.comments.find(comment => comment.id === id);
+  updateComment(parent, { id, data }, { db, pubsub }, info) {
+    let comment = db.comments.find(comment => comment.id === id);
 
     if (!comment) {
       throw new Error("Comment not found!");
     }
 
-    return Object.assign(comment, data);
+    Object.assign(comment, data);
+
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: "UPDATED",
+        data: comment
+      }
+    });
+
+    return comment;
   }
 };
