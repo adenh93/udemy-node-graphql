@@ -60,12 +60,17 @@ export const Mutation = {
     db.posts.push(post);
 
     if (post.published) {
-      pubsub.publish("post", { post });
+      pubsub.publish("post", {
+        post: {
+          mutation: "CREATED",
+          data: post
+        }
+      });
     }
 
     return post;
   },
-  deletePost(parent, { id }, { db }, info) {
+  deletePost(parent, { id }, { db, pubsub }, info) {
     const post = db.posts.find(post => post.id === id);
 
     if (!post) {
@@ -75,16 +80,54 @@ export const Mutation = {
     db.comments = db.comments.filter(comment => comment.post !== id);
     db.posts = db.posts.filter(post => post.id !== id);
 
+    if (post.published) {
+      pubsub.publish("post", {
+        post: {
+          mutation: "DELETED",
+          data: post
+        }
+      });
+    }
+
     return post;
   },
-  updatePost(parent, { id, data }, { db }, info) {
+  updatePost(parent, { id, data }, { db, pubsub }, info) {
     const post = db.posts.find(post => post.id === id);
+    const originalPost = { ...post };
 
     if (!post) {
       throw new Error("Post not found!");
     }
 
-    return Object.assign(post, data);
+    const updated = data.title || data.body;
+    Object.assign(post, data);
+
+    if (typeof data.published === "boolean") {
+      if (originalPost.published && !post.published) {
+        pubsub.publish("post", {
+          post: {
+            mutation: "DELETED",
+            data: originalPost
+          }
+        });
+      } else if (!originalPost.published && post.published) {
+        pubsub.publish("post", {
+          post: {
+            mutation: "CREATED",
+            data: post
+          }
+        });
+      }
+    } else if (updated) {
+      pubsub.publish("post", {
+        post: {
+          mutation: "UPDATED",
+          data: post
+        }
+      });
+    }
+
+    return post;
   },
   createComment(parent, { data }, { db, pubsub }, info) {
     const userExists = db.users.some(user => user.id === data.author);
