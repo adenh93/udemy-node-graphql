@@ -49,7 +49,7 @@ export const Mutation = {
 
     return Object.assign(user, data);
   },
-  createPost(parent, { data }, { db }, info) {
+  createPost(parent, { data }, { db, pubsub }, info) {
     const userExists = db.users.some(user => user.id === data.author);
 
     if (!userExists) {
@@ -58,6 +58,10 @@ export const Mutation = {
 
     const post = { id: uuidv4(), ...data };
     db.posts.push(post);
+
+    if (post.published) {
+      pubsub.publish("post", { post });
+    }
 
     return post;
   },
