@@ -30,6 +30,25 @@ export const Mutation = {
 
     return user;
   },
+  updateUser(parent, { id, data }, { db }, info) {
+    const user = db.users.find(user => user.id === id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (typeof data.email === "string") {
+      if (data.email !== user.email) {
+        const emailTaken = db.users.some(user => user.email === data.email);
+
+        if (emailTaken) {
+          throw new Error("Email in use");
+        }
+      }
+    }
+
+    return Object.assign(user, data);
+  },
   createPost(parent, { data }, { db }, info) {
     const userExists = db.users.some(user => user.id === data.author);
 
@@ -53,6 +72,15 @@ export const Mutation = {
     db.posts = db.posts.filter(post => post.id !== id);
 
     return post;
+  },
+  updatePost(parent, { id, data }, { db }, info) {
+    const post = db.posts.find(post => post.id === id);
+
+    if (!post) {
+      throw new Error("Post not found!");
+    }
+
+    return Object.assign(post, data);
   },
   createComment(parent, { data }, { db }, info) {
     const userExists = db.users.some(user => user.id === data.author);
@@ -84,5 +112,14 @@ export const Mutation = {
     db.comments = db.comments.filter(comment => comment.id !== id);
 
     return comment;
+  },
+  updateComment(parent, { id, data }, { db }, info) {
+    const comment = db.comments.find(comment => comment.id === id);
+
+    if (!comment) {
+      throw new Error("Comment not found!");
+    }
+
+    return Object.assign(comment, data);
   }
 };
