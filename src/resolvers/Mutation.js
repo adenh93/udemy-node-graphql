@@ -82,7 +82,7 @@ export const Mutation = {
 
     return Object.assign(post, data);
   },
-  createComment(parent, { data }, { db }, info) {
+  createComment(parent, { data }, { db, pubsub }, info) {
     const userExists = db.users.some(user => user.id === data.author);
 
     if (!userExists) {
@@ -99,6 +99,7 @@ export const Mutation = {
 
     const comment = { id: uuidv4(), ...data };
     db.comments.push(comment);
+    pubsub.publish(`comment ${data.post}`, { comment });
 
     return comment;
   },
