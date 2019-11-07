@@ -6,7 +6,8 @@
   "scripts": {
     "start": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js -e js,json,graphql",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "get-schema": "graphql get-schema -p prisma"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/adenh93/udemy-node-graphql#readme",
   "dependencies": {
     "graphql-yoga": "^1.18.3",
+    "prisma-binding": "^2.3.16",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -29,6 +31,7 @@
     "@babel/node": "^7.6.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
+    "graphql-cli": "^3.0.14",
     "nodemon": "^1.19.4"
   }
 }
