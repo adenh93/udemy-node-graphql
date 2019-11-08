@@ -4,14 +4,7 @@ export const Query = {
 
     if (query) {
       opArgs.where = {
-        OR: [
-          {
-            name_contains: query
-          },
-          {
-            email_contains: query
-          }
-        ]
+        OR: [{ name_contains: query }, { email_contains: query }]
       };
     }
 
@@ -22,31 +15,19 @@ export const Query = {
 
     if (query) {
       opArgs.where = {
-        OR: [
-          {
-            title_contains: query
-          },
-          {
-            body_contains: query
-          }
-        ]
+        OR: [{ title_contains: query }, { body_contains: query }]
       };
     }
 
     return prisma.query.posts(opArgs, info);
   },
-  comments(parent, { query }, { db }, info) {
-    if (query) {
-      return db.comments.filter(comment =>
-        comment.text.toLowerCase().includes(query.toLowerCase())
-      );
-    }
-    return db.comments;
+  comments(parent, args, { prisma }, info) {
+    return prisma.query.comments(null, info);
   },
   me(parent, args, { db }, info) {
     return db.users[0];
   },
-  post(parent, { id }, { db }, info) {
-    return db.posts.find(post => post.id === id);
+  post(parent, { id }, { prisma }, info) {
+    return prisma.query.post({ where: { id } }, info);
   }
 };
