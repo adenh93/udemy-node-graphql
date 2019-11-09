@@ -1,3 +1,4 @@
+import dotenv from "dotenv/config";
 import { GraphQLServer } from "graphql-yoga";
 import * as resolvers from "./resolvers";
 import prisma from "./prisma";
