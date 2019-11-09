@@ -26,7 +26,7 @@ export const Mutation = {
 
     return prisma.mutation.updateUser({ where: { id }, data }, info);
   },
-  async createPost(parent, { data }, { prisma, pubsub }, info) {
+  async createPost(parent, { data }, { prisma }, info) {
     const userExists = await prisma.exists.User({ id: data.author });
 
     if (!userExists) {
@@ -38,7 +38,7 @@ export const Mutation = {
       info
     );
   },
-  async deletePost(parent, { id }, { prisma, pubsub }, info) {
+  async deletePost(parent, { id }, { prisma }, info) {
     const post = await prisma.exists.Post({ id });
 
     if (!post) {
@@ -47,7 +47,7 @@ export const Mutation = {
 
     return prisma.mutation.deletePost({ where: { id } }, info);
   },
-  async updatePost(parent, { id, data }, { prisma, pubsub }, info) {
+  async updatePost(parent, { id, data }, { prisma }, info) {
     let post = await prisma.exists.Post({ id });
 
     if (!post) {
@@ -56,7 +56,7 @@ export const Mutation = {
 
     return prisma.mutation.updatePost({ where: { id }, data }, info);
   },
-  async createComment(parent, { data }, { prisma, pubsub }, info) {
+  async createComment(parent, { data }, { prisma }, info) {
     const userExists = await prisma.exists.User({ id: data.author });
 
     if (!userExists) {
@@ -87,7 +87,7 @@ export const Mutation = {
       info
     );
   },
-  async deleteComment(parent, { id }, { prisma, pubsub }, info) {
+  async deleteComment(parent, { id }, { prisma }, info) {
     const comment = await prisma.exists.Comment({ id });
 
     if (!comment) {
@@ -96,7 +96,7 @@ export const Mutation = {
 
     return prisma.mutation.deleteComment({ where: { id } }, info);
   },
-  async updateComment(parent, { id, data }, { prisma, pubsub }, info) {
+  async updateComment(parent, { id, data }, { prisma }, info) {
     const comment = await prisma.exists.Comment({ id });
 
     if (!comment) {

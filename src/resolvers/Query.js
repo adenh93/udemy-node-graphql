@@ -24,9 +24,6 @@ export const Query = {
   comments(parent, args, { prisma }, info) {
     return prisma.query.comments(null, info);
   },
-  me(parent, args, { db }, info) {
-    return db.users[0];
-  },
   post(parent, { id }, { prisma }, info) {
     return prisma.query.post({ where: { id } }, info);
   }
