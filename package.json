@@ -22,8 +22,7 @@
   "homepage": "https://github.com/adenh93/udemy-node-graphql#readme",
   "dependencies": {
     "graphql-yoga": "^1.18.3",
-    "prisma-binding": "^2.3.16",
-    "uuid": "^3.3.3"
+    "prisma-binding": "^2.3.16"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",

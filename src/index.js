@@ -1,9 +1,6 @@
-import { GraphQLServer, PubSub } from "graphql-yoga";
-import db from "./db";
+import { GraphQLServer } from "graphql-yoga";
 import * as resolvers from "./resolvers";
 import prisma from "./prisma";
-
-const pubsub = new PubSub();
 
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
@@ -11,8 +8,6 @@ const server = new GraphQLServer({
     ...resolvers
   },
   context: {
-    db,
-    pubsub,
     prisma
   }
 });
