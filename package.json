@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/adenh93/udemy-node-graphql#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
     "graphql-yoga": "^1.18.3",
     "prisma-binding": "^2.3.16"
