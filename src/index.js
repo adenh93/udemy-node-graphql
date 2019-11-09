@@ -1,4 +1,4 @@
-import dotenv from "dotenv/config";
+import "dotenv/config";
 import { GraphQLServer } from "graphql-yoga";
 import * as resolvers from "./resolvers";
 import prisma from "./prisma";
@@ -8,8 +8,11 @@ const server = new GraphQLServer({
   resolvers: {
     ...resolvers
   },
-  context: {
-    prisma
+  context(request) {
+    return {
+      prisma,
+      request
+    };
   }
 });
 
