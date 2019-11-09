@@ -26,6 +26,26 @@ export const Mutation = {
       token
     };
   },
+  async login(parent, { data }, { prisma }, info) {
+    const user = await prisma.query.user({ where: { email: data.email } });
+
+    if (!user) {
+      throw new Error("Incorrect username or password.");
+    }
+
+    const authenticated = await bcrypt.compare(data.password, user.password);
+
+    if (!authenticated) {
+      throw new Error("Incorrect username or password.");
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+
+    return {
+      user,
+      token
+    };
+  },
   async deleteUser(parent, { id }, { prisma }, info) {
     const user = await prisma.exists.User({ id });
 
