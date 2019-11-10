@@ -47,21 +47,13 @@ export const Mutation = {
       token
     };
   },
-  async deleteUser(parent, { id }, { prisma }, info) {
-    const user = await prisma.exists.User({ id });
-
-    if (!user) {
-      throw new Error("User not found!");
-    }
+  async deleteUser(parent, args, { prisma, request }, info) {
+    const id = getUserId(request);
 
     return prisma.mutation.deleteUser({ where: { id } }, info);
   },
-  async updateUser(parent, { id, data }, { prisma }, info) {
-    const user = await prisma.exists.User({ id });
-
-    if (!user) {
-      throw new Error("User not found!");
-    }
+  async updateUser(parent, { data }, { prisma, request }, info) {
+    const id = getUserId(request);
 
     return prisma.mutation.updateUser({ where: { id }, data }, info);
   },
@@ -79,10 +71,11 @@ export const Mutation = {
       info
     );
   },
-  async deletePost(parent, { id }, { prisma }, info) {
-    const post = await prisma.exists.Post({ id });
+  async deletePost(parent, { id }, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const postExists = await prisma.exists.Post({ id, author: { id: userId } });
 
-    if (!post) {
+    if (!postExists) {
       throw new Error("Post not found!");
     }
 
