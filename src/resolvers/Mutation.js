@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import generateToken from "../utils/generateToken";
 import getUserId from "../utils/getUserId";
 
 const Mutation = {
@@ -20,11 +20,9 @@ const Mutation = {
       data: { ...data, password }
     });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-
     return {
       user,
-      token
+      token: generateToken(user.id)
     };
   },
   async login(parent, { data }, { prisma }, info) {
@@ -40,11 +38,9 @@ const Mutation = {
       throw new Error("Incorrect username or password.");
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-
     return {
       user,
-      token
+      token: generateToken(user.id)
     };
   },
   async deleteUser(parent, args, { prisma, request }, info) {
