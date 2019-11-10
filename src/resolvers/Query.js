@@ -44,7 +44,10 @@ const Query = {
     return prisma.query.posts(opArgs, info);
   },
   comments(parent, args, { prisma }, info) {
-    return prisma.query.comments(null, info);
+    return prisma.query.comments(
+      { where: { post: { published: true } } },
+      info
+    );
   },
   async post(parent, { id }, { prisma, request }, info) {
     const userId = getUserId(request);
