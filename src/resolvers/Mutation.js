@@ -81,21 +81,18 @@ export const Mutation = {
 
     return prisma.mutation.deletePost({ where: { id } }, info);
   },
-  async updatePost(parent, { id, data }, { prisma }, info) {
-    let post = await prisma.exists.Post({ id });
+  async updatePost(parent, { id, data }, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const postExists = await prisma.exists.Post({ id, author: { id: userId } });
 
-    if (!post) {
+    if (!postExists) {
       throw new Error("Post not found!");
     }
 
     return prisma.mutation.updatePost({ where: { id }, data }, info);
   },
-  async createComment(parent, { data }, { prisma }, info) {
-    const userExists = await prisma.exists.User({ id: data.author });
-
-    if (!userExists) {
-      throw new Error("Author not found!");
-    }
+  async createComment(parent, { data }, { prisma, request }, info) {
+    const userId = getUserId(request);
 
     const postExists = await prisma.exists.Post({
       id: data.post,
@@ -111,7 +108,7 @@ export const Mutation = {
         data: {
           ...data,
           author: {
-            connect: { id: data.author }
+            connect: { id: userId }
           },
           post: {
             connect: { id: data.post }
@@ -121,19 +118,27 @@ export const Mutation = {
       info
     );
   },
-  async deleteComment(parent, { id }, { prisma }, info) {
-    const comment = await prisma.exists.Comment({ id });
+  async deleteComment(parent, { id }, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const commentExists = await prisma.exists.Comment({
+      id,
+      author: { id: userId }
+    });
 
-    if (!comment) {
+    if (!commentExists) {
       throw new Error("Comment not found!");
     }
 
     return prisma.mutation.deleteComment({ where: { id } }, info);
   },
-  async updateComment(parent, { id, data }, { prisma }, info) {
-    const comment = await prisma.exists.Comment({ id });
+  async updateComment(parent, { id, data }, { prisma, request }, info) {
+    const userId = getUserId(request);
+    const commentExists = await prisma.exists.Comment({
+      id,
+      author: { id: userId }
+    });
 
-    if (!comment) {
+    if (!commentExists) {
       throw new Error("Comment not found!");
     }
 
