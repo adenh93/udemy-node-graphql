@@ -1,19 +1,18 @@
 import "dotenv/config";
 import { GraphQLServer } from "graphql-yoga";
-import * as resolvers from "./resolvers";
+import { resolvers, fragmentReplacements } from "./resolvers";
 import prisma from "./prisma";
 
 const server = new GraphQLServer({
   typeDefs: "./src/schema.graphql",
-  resolvers: {
-    ...resolvers
-  },
+  resolvers,
   context(request) {
     return {
       prisma,
       request
     };
-  }
+  },
+  fragmentReplacements
 });
 
 server.start(() => {

@@ -1,6 +1,6 @@
 import getUserId from "../utils/getUserId";
 
-export const Query = {
+const Query = {
   me(parent, args, { prisma, request }, info) {
     const id = getUserId(request);
     return prisma.query.user({ where: { id } }, info);
@@ -62,3 +62,5 @@ export const Query = {
     return posts[0];
   }
 };
+
+export { Query as default };

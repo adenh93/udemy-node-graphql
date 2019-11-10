@@ -1,4 +1,4 @@
-export const Subscription = {
+const Subscription = {
   comment: {
     async subscribe(parent, { postId }, { prisma }, info) {
       const postExists = await prisma.exists.Post({ id: postId });
@@ -22,3 +22,5 @@ export const Subscription = {
     }
   }
 };
+
+export { Subscription as default };

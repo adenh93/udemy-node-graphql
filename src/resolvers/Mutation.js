@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getUserId from "../utils/getUserId";
 
-export const Mutation = {
+const Mutation = {
   async createUser(parent, { data }, { prisma }, info) {
     const emailTaken = await prisma.exists.User({ email: data.email });
 
@@ -145,3 +145,5 @@ export const Mutation = {
     return prisma.mutation.updateComment({ where: { id }, data }, info);
   }
 };
+
+export { Mutation as default };
