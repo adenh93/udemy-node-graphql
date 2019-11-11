@@ -5,8 +5,11 @@ const Query = {
     const id = getUserId(request);
     return prisma.query.user({ where: { id } }, info);
   },
-  users(parent, { query }, { prisma }, info) {
-    const opArgs = {};
+  users(parent, { query, first, skip }, { prisma }, info) {
+    const opArgs = {
+      first,
+      skip
+    };
 
     if (query) {
       opArgs.where = {
@@ -16,8 +19,10 @@ const Query = {
 
     return prisma.query.users(opArgs, info);
   },
-  posts(parent, { query }, { prisma }, info) {
+  posts(parent, { query, first, skip }, { prisma }, info) {
     const opArgs = {
+      first,
+      skip,
       where: {
         published: true
       }

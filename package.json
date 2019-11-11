@@ -7,6 +7,7 @@
     "start": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js -e js,json,graphql",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prisma-token": "env $(cat .env | xargs) prisma token -p prisma/prisma.yml",
     "prisma-deploy": "env $(cat .env | xargs) prisma deploy -p prisma/prisma.yml",
     "postprisma-deploy": "env $(cat .env | xargs) graphql get-schema -p prisma",
     "prisma-delete": "env $(cat .env | xargs) prisma delete -p prisma/prisma.yml"
