@@ -1,8 +1,8 @@
 type Query {
-  users(query: String, first: Int, skip: Int): [User!]!
-  posts(query: String, first: Int, skip: Int): [Post!]!
-  myPosts(query: String): [Post!]!
-  comments: [Comment!]!
+  users(query: String, pagination: PaginationInput): [User!]!
+  posts(query: String, pagination: PaginationInput): [Post!]!
+  myPosts(query: String, pagination: PaginationInput): [Post!]!
+  comments(pagination: PaginationInput): [Comment!]!
   me: User!
   post(id: String!): Post
 }
@@ -24,6 +24,12 @@ type Subscription {
   comment(postId: ID!): CommentSubscriptionPayload!
   post: PostSubscriptionPayload!
   myPosts: PostSubscriptionPayload
+}
+
+input PaginationInput {
+  first: Int
+  skip: Int
+  after: String
 }
 
 input CreateUserInput {
