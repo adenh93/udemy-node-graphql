@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Nov 11 2019 12:03:19 GMT+0930 (Australian Central Standard Time)
+# timestamp: Mon Nov 11 2019 12:08:47 GMT+0930 (Australian Central Standard Time)
 
 type AggregateComment {
   count: Int!
@@ -23,8 +23,8 @@ type Comment implements Node {
   text: String!
   author: User!
   post: Post!
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -89,8 +89,8 @@ enum CommentOrderByInput {
 type CommentPreviousValues {
   id: ID!
   text: String!
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input CommentScalarWhereInput {
@@ -548,8 +548,8 @@ type Post implements Node {
   published: Boolean!
   author: User!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -626,8 +626,8 @@ type PostPreviousValues {
   title: String!
   body: String!
   published: Boolean!
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input PostScalarWhereInput {
@@ -1142,8 +1142,8 @@ type User implements Node {
   password: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -1220,8 +1220,8 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserSubscriptionPayload {
