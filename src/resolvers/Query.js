@@ -5,10 +5,8 @@ const Query = {
     const id = getUserId(request);
     return prisma.query.user({ where: { id } }, info);
   },
-  users(parent, { query, pagination }, { prisma }, info) {
-    const opArgs = {
-      ...pagination
-    };
+  users(parent, { query }, { prisma }, info) {
+    const opArgs = {};
 
     if (query) {
       opArgs.where = {
@@ -16,11 +14,10 @@ const Query = {
       };
     }
 
-    return prisma.query.users(opArgs, info);
+    return prisma.query.users(null, info);
   },
-  posts(parent, { query, pagination }, { prisma }, info) {
+  posts(parent, { query }, { prisma }, info) {
     const opArgs = {
-      ...pagination,
       where: {
         published: true
       }
@@ -32,10 +29,9 @@ const Query = {
 
     return prisma.query.posts(opArgs, info);
   },
-  myPosts(parent, { query, pagination }, { prisma, request }, info) {
+  myPosts(parent, { query }, { prisma, request }, info) {
     const userId = getUserId(request);
     const opArgs = {
-      ...pagination,
       where: {
         author: { id: userId }
       }
@@ -47,9 +43,8 @@ const Query = {
 
     return prisma.query.posts(opArgs, info);
   },
-  comments(parent, { pagination }, { prisma }, info) {
+  comments(parent, args, { prisma }, info) {
     const opArgs = {
-      ...pagination,
       where: {
         post: { published: true }
       }

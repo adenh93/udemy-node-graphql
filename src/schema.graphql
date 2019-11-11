@@ -1,8 +1,33 @@
+# import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
+
 type Query {
-  users(query: String, pagination: PaginationInput): [User!]!
-  posts(query: String, pagination: PaginationInput): [Post!]!
-  myPosts(query: String, pagination: PaginationInput): [Post!]!
-  comments(pagination: PaginationInput): [Comment!]!
+  users(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: UserOrderByInput
+  ): [User!]!
+  posts(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: PostOrderByInput
+  ): [Post!]!
+  myPosts(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: PostOrderByInput
+  ): [Post!]!
+  comments(
+    first: Int
+    skip: Int
+    after: String
+    orderBy: CommentOrderByInput
+  ): [Comment!]!
   me: User!
   post(id: String!): Post
 }
@@ -24,12 +49,6 @@ type Subscription {
   comment(postId: ID!): CommentSubscriptionPayload!
   post: PostSubscriptionPayload!
   myPosts: PostSubscriptionPayload
-}
-
-input PaginationInput {
-  first: Int
-  skip: Int
-  after: String
 }
 
 input CreateUserInput {
