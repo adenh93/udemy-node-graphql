@@ -104,3 +104,36 @@ test("Should get all published posts", async () => {
   expect(data.posts.length).toBe(1);
   expect(data.posts[0].published).toBe(true);
 });
+
+test("Should not allow login with bad credentials", async () => {
+  const login = gql`
+    mutation {
+      login(data: { email: "test123@test.com", password: "somePassword" }) {
+        token
+        user {
+          id
+        }
+      }
+    }
+  `;
+
+  await expect(client.mutate({ mutation: login })).rejects.toThrow();
+});
+
+test("Should not allow user to sign up with an invalid password", async () => {
+  const createUser = gql`
+    mutation {
+      createUser(
+        data: {
+          name: "Test name"
+          email: "test@graphql.test"
+          password: "abc123"
+        }
+      ) {
+        token
+      }
+    }
+  `;
+
+  await expect(client.mutate({ mutation: createUser })).rejects.toThrow();
+});
