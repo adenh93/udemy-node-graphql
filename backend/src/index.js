@@ -1,19 +1,5 @@
 import "dotenv/config";
-import { GraphQLServer } from "graphql-yoga";
-import { resolvers, fragmentReplacements } from "./resolvers";
-import prisma from "./prisma";
-
-const server = new GraphQLServer({
-  typeDefs: "./src/schema.graphql",
-  resolvers,
-  context(request) {
-    return {
-      prisma,
-      request
-    };
-  },
-  fragmentReplacements
-});
+import server from "./server";
 
 server.start(() => {
   console.log("GraphQL server is running");

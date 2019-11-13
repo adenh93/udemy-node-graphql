@@ -6,12 +6,16 @@
   "scripts": {
     "start": "babel-node src/index.js",
     "dev": "nodemon --exec babel-node src/index.js -e js,json,graphql",
-    "test": "jest",
+    "test": "env $(cat .env | xargs) jest",
     "prisma-token": "env $(cat .env | xargs) prisma token -p prisma/prisma.yml",
     "prisma-deploy": "env $(cat .env | xargs) prisma deploy -p prisma/prisma.yml",
     "prisma-deploy-test": "env $(cat .env.test | xargs) prisma deploy -p prisma/prisma.yml",
     "postprisma-deploy": "env $(cat .env | xargs) graphql get-schema -p prisma",
     "prisma-delete": "env $(cat .env | xargs) prisma delete -p prisma/prisma.yml"
+  },
+  "jest": {
+    "globalSetup": "./tests/jest/globalSetup.js",
+    "globalTeardown": "./tests/jest/globalTeardown.js"
   },
   "repository": {
     "type": "git",
@@ -36,7 +40,9 @@
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
+    "@babel/polyfill": "^7.7.0",
     "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.7.0",
     "@types/jest": "^24.0.22",
     "graphql-cli": "^3.0.14",
     "jest": "^24.9.0",
