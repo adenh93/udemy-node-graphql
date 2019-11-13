@@ -1,49 +1,13 @@
 import "cross-fetch/polyfill";
 import ApolloBoost, { gql } from "apollo-boost";
-import hashPassword from "../src/utils/hashPassword";
 import prisma from "../src/prisma";
+import seedDatabase from "./utils/seedDatabase";
 
 const client = new ApolloBoost({
   uri: "http://localhost:4000"
 });
 
-beforeEach(async () => {
-  await prisma.mutation.deleteManyUsers();
-
-  const { id } = await prisma.mutation.createUser({
-    data: {
-      name: "Test User",
-      email: "test123@test.com",
-      password: await hashPassword("testPassword123")
-    }
-  });
-
-  await prisma.mutation.createPost({
-    data: {
-      title: "Test Post 1",
-      body: "Test Body",
-      published: true,
-      author: {
-        connect: {
-          id
-        }
-      }
-    }
-  });
-
-  await prisma.mutation.createPost({
-    data: {
-      title: "Test Post 2",
-      body: "Test Body",
-      published: false,
-      author: {
-        connect: {
-          id
-        }
-      }
-    }
-  });
-});
+beforeEach(seedDatabase);
 
 test("Should create a new user", async () => {
   const createUser = gql`
@@ -86,23 +50,6 @@ test("Should expose public author profiles", async () => {
 
   expect(data.users.length).toBe(1);
   expect(data.users[0].email).toBe(null);
-});
-
-test("Should get all published posts", async () => {
-  const getPosts = gql`
-    query {
-      posts {
-        id
-        title
-        published
-      }
-    }
-  `;
-
-  const { data } = await client.query({ query: getPosts });
-
-  expect(data.posts.length).toBe(1);
-  expect(data.posts[0].published).toBe(true);
 });
 
 test("Should not allow login with bad credentials", async () => {
