@@ -70,3 +70,37 @@ test("Should create a new user", async () => {
   const userExists = await prisma.exists.User({ id: data.createUser.user.id });
   expect(userExists).toBe(true);
 });
+
+test("Should expose public author profiles", async () => {
+  const getUsers = gql`
+    query {
+      users {
+        id
+        name
+        email
+      }
+    }
+  `;
+
+  const { data } = await client.query({ query: getUsers });
+
+  expect(data.users.length).toBe(1);
+  expect(data.users[0].email).toBe(null);
+});
+
+test("Should get all published posts", async () => {
+  const getPosts = gql`
+    query {
+      posts {
+        id
+        title
+        published
+      }
+    }
+  `;
+
+  const { data } = await client.query({ query: getPosts });
+
+  expect(data.posts.length).toBe(1);
+  expect(data.posts[0].published).toBe(true);
+});
