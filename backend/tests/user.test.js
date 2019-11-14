@@ -2,7 +2,7 @@ import "cross-fetch/polyfill";
 import { gql } from "apollo-boost";
 import prisma from "../src/prisma";
 import getClient from "./utils/getClient";
-import seedDatabase from "./utils/seedDatabase";
+import seedDatabase, { userOne } from "./utils/seedDatabase";
 
 const client = getClient();
 
@@ -82,4 +82,39 @@ test("Should not allow user to sign up with an invalid password", async () => {
   `;
 
   await expect(client.mutate({ mutation: createUser })).rejects.toThrow();
+});
+
+test("Should fetch user profile", async () => {
+  const client = getClient(userOne.jwt);
+  const getProfile = gql`
+    query {
+      me {
+        id
+        name
+        email
+      }
+    }
+  `;
+
+  const { data } = await client.query({ query: getProfile });
+
+  expect(data.me.id).toBe(userOne.user.id);
+  expect(data.me.name).toBe(userOne.user.name);
+  expect(data.me.email).toBe(userOne.user.email);
+});
+
+test("Should fetch an authenticated user's posts", async () => {
+  const client = getClient(userOne.jwt);
+  const getPosts = gql`
+    query {
+      myPosts {
+        id
+        title
+      }
+    }
+  `;
+
+  const { data } = await client.query({ query: getPosts });
+
+  expect(data.posts.length).toBe(2);
 });
