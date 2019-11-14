@@ -102,19 +102,3 @@ test("Should fetch user profile", async () => {
   expect(data.me.name).toBe(userOne.user.name);
   expect(data.me.email).toBe(userOne.user.email);
 });
-
-test("Should fetch an authenticated user's posts", async () => {
-  const client = getClient(userOne.jwt);
-  const getPosts = gql`
-    query {
-      myPosts {
-        id
-        title
-      }
-    }
-  `;
-
-  const { data } = await client.query({ query: getPosts });
-
-  expect(data.posts.length).toBe(2);
-});
