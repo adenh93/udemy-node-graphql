@@ -12,6 +12,16 @@ const userOne = {
   jwt: undefined
 };
 
+const userTwo = {
+  input: {
+    name: "Another Test User",
+    email: "test321@test.com",
+    password: bcrypt.hashSync("testPassword321")
+  },
+  user: undefined,
+  jwt: undefined
+};
+
 const postOne = {
   input: {
     title: "Test Post 1",
@@ -30,6 +40,20 @@ const postTwo = {
   post: undefined
 };
 
+const commentOne = {
+  input: {
+    text: "Test Comment 1"
+  },
+  comment: undefined
+};
+
+const commentTwo = {
+  input: {
+    text: "Test Comment 2"
+  },
+  comment: undefined
+};
+
 const seedDatabase = async () => {
   await prisma.mutation.deleteManyUsers();
 
@@ -37,7 +61,12 @@ const seedDatabase = async () => {
     data: userOne.input
   });
 
+  userTwo.user = await prisma.mutation.createUser({
+    data: userTwo.input
+  });
+
   userOne.jwt = jwt.sign({ id: userOne.user.id }, process.env.JWT_SECRET);
+  userTwo.jwt = jwt.sign({ id: userTwo.user.id }, process.env.JWT_SECRET);
 
   postOne.post = await prisma.mutation.createPost({
     data: {
@@ -60,6 +89,46 @@ const seedDatabase = async () => {
       }
     }
   });
+
+  commentOne.comment = await prisma.mutation.createComment({
+    data: {
+      ...commentOne.input,
+      author: {
+        connect: {
+          id: userOne.user.id
+        }
+      },
+      post: {
+        connect: {
+          id: postOne.post.id
+        }
+      }
+    }
+  });
+
+  commentTwo.comment = await prisma.mutation.createComment({
+    data: {
+      ...commentTwo.input,
+      author: {
+        connect: {
+          id: userTwo.user.id
+        }
+      },
+      post: {
+        connect: {
+          id: postOne.post.id
+        }
+      }
+    }
+  });
 };
 
-export { seedDatabase as default, userOne, postOne, postTwo };
+export {
+  seedDatabase as default,
+  userOne,
+  userTwo,
+  postOne,
+  postTwo,
+  commentOne,
+  commentTwo
+};

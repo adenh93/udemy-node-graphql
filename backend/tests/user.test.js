@@ -29,8 +29,8 @@ test("Should create a new user", async () => {
 test("Should expose public author profiles", async () => {
   const { data } = await client.query({ query: getUsers });
 
-  expect(data.users.length).toBe(1);
-  expect(data.users[0].email).toBe(null);
+  expect(data.users.length).toBe(2);
+  data.users.forEach(user => expect(user.email).toBe(null));
 });
 
 test("Should not allow login with bad credentials", async () => {
