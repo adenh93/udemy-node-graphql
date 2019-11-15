@@ -2,7 +2,7 @@ import "cross-fetch/polyfill";
 import prisma from "../src/prisma";
 import getClient from "./utils/getClient";
 import seedDatabase, { userOne } from "./utils/seedDatabase";
-import { createUser, getUsers, login, getProfile } from "./utils/operations";
+import { createUser, getUsers, login, getProfile } from "./operations";
 
 const client = getClient();
 
