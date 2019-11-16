@@ -7,7 +7,8 @@ import {
   myPosts,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  subscribeToPosts
 } from "./operations";
 
 const client = getClient();
@@ -76,4 +77,19 @@ test("Should be able to delete a post", async () => {
   const exists = await prisma.exists.Post({ id: postTwo.post.id });
 
   expect(exists).toBe(false);
+});
+
+test("Should subscribe to published posts", async done => {
+  client.subscribe({ query: subscribeToPosts }).subscribe({
+    next({ data }) {
+      expect(data.post.mutation).toBe("DELETED");
+      done();
+    }
+  });
+
+  setTimeout(
+    async () =>
+      await prisma.mutation.deletePost({ where: { id: postOne.post.id } }),
+    100
+  );
 });

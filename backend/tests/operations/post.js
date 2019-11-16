@@ -47,4 +47,24 @@ const deletePost = gql`
   }
 `;
 
-export { getPosts, myPosts, createPost, updatePost, deletePost };
+const subscribeToPosts = gql`
+  subscription {
+    post {
+      mutation
+      node {
+        id
+        title
+        published
+      }
+    }
+  }
+`;
+
+export {
+  getPosts,
+  myPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  subscribeToPosts
+};

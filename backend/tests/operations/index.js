@@ -1,3 +1,3 @@
-export { createUser, login, getUsers, getProfile } from "./user";
-export { getPosts, myPosts, createPost, updatePost, deletePost } from "./post";
-export { deleteComment } from "./comment";
+export * from "./user";
+export * from "./post";
+export * from "./comment";
