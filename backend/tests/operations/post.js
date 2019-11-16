@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-const getPosts = gql`
+export const getPosts = gql`
   query {
     posts {
       id
@@ -10,7 +10,7 @@ const getPosts = gql`
   }
 `;
 
-const myPosts = gql`
+export const myPosts = gql`
   query {
     myPosts {
       id
@@ -19,7 +19,7 @@ const myPosts = gql`
   }
 `;
 
-const createPost = gql`
+export const createPost = gql`
   mutation($data: CreatePostInput) {
     createPost(data: $data) {
       id
@@ -29,7 +29,7 @@ const createPost = gql`
   }
 `;
 
-const updatePost = gql`
+export const updatePost = gql`
   mutation($id: ID!, $data: UpdatePostInput!) {
     updatePost(id: $id, data: $data) {
       id
@@ -39,7 +39,7 @@ const updatePost = gql`
   }
 `;
 
-const deletePost = gql`
+export const deletePost = gql`
   mutation($id: ID!) {
     deletePost(id: $id) {
       id
@@ -47,7 +47,7 @@ const deletePost = gql`
   }
 `;
 
-const subscribeToPosts = gql`
+export const subscribeToPosts = gql`
   subscription {
     post {
       mutation
@@ -59,12 +59,3 @@ const subscribeToPosts = gql`
     }
   }
 `;
-
-export {
-  getPosts,
-  myPosts,
-  createPost,
-  updatePost,
-  deletePost,
-  subscribeToPosts
-};

@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-const createUser = gql`
+export const createUser = gql`
   mutation($data: CreateUserInput!) {
     createUser(data: $data) {
       token
@@ -11,7 +11,7 @@ const createUser = gql`
   }
 `;
 
-const getUsers = gql`
+export const getUsers = gql`
   query {
     users {
       id
@@ -21,7 +21,7 @@ const getUsers = gql`
   }
 `;
 
-const login = gql`
+export const login = gql`
   mutation($data: LoginUserInput!) {
     login(data: $data) {
       token
@@ -32,7 +32,7 @@ const login = gql`
   }
 `;
 
-const getProfile = gql`
+export const getProfile = gql`
   query {
     me {
       id
@@ -41,5 +41,3 @@ const getProfile = gql`
     }
   }
 `;
-
-export { createUser, login, getUsers, getProfile };
